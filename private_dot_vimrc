@@ -1,0 +1,122 @@
+source ~/.vim/bootstrap.vim
+call plug#begin('~/.vim/plugged')
+  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'jason0x43/vim-js-indent'
+  Plug '/usr/local/opt/fzf'
+  Plug 'junegunn/fzf.vim'
+  Plug 'mileszs/ack.vim'
+  Plug 'ctrlpvim/ctrlp.vim'
+  " Plug 'vim-syntastic/syntastic'
+  Plug 'junegunn/rainbow_parentheses.vim'
+  Plug 'https://github.com/pangloss/vim-javascript'
+  Plug 'bling/vim-airline'
+  Plug 'tpope/vim-surround'
+  Plug 'airblade/vim-gitgutter'
+  " Plug 'tpope/vim-sleuth'
+  " Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-repeat'
+  Plug 'junegunn/vim-emoji'
+  " Plug 'leafgarland/typescript-vim'
+  " Plug 'Quramy/tsuquyomi'
+  " Plug 'rust-lang/rust.vim'
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Plug 'udalov/kotlin-vim'
+  " Plug 'tpope/vim-fugitive'
+  " Plug 'jparise/vim-graphql'
+  " Plug 'kristijanhusak/vim-carbon-now-sh'
+  " Plug 'GutenYe/json5.vim'
+  " Plug 'jeffkreeftmeijer/vim-numbertoggle'
+  " Plug 'kana/vim-textobj-user'
+  " Plug 'glts/vim-textobj-comment'
+  " Plug 'dense-analysis/ale'
+  " if has('nvim')
+    " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " else
+    " Plug 'Shougo/deoplete.nvim'
+    " Plug 'roxma/nvim-yarp'
+    " Plug 'roxma/vim-hug-neovim-rpc'
+  " endif
+call plug#end()
+
+" let g:deoplete#enable_at_startup = 1
+
+" Use ALE as completion source for all code.
+" call deoplete#custom#option('sources', {
+" \ '_': ['ale'],
+" \})
+
+map <C-n> :NERDTreeToggle<CR>
+
+" Wrap git commit messages.
+function SetGitCommitOptions()
+  set nonumber
+  set nopaste
+  set textwidth=76
+  startinsert
+endfunction
+autocmd FileType gitcommit call SetGitCommitOptions()
+
+" Syntastic defaults (from README)
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" Typescript tsuquyomi w/ syntastic
+let g:tsuquyomi_disable_quickfix = 1
+" Shouldn't use 'tsc' checker!
+let g:syntastic_typescript_checkers = ['tsuquyomi']
+
+" Nerd Autocommenter
+let g:NERDDefaultAlign = 'left'
+let g:NERDCommentEmptyLines = 1
+let g:NERDSpaceDelims = 1
+
+" Autocomplete settings.
+set omnifunc=ale#completion#OmniFunc
+set completeopt=longest,menuone
+
+augroup emoji_complete
+  autocmd!
+  autocmd FileType markdown setlocal completefunc=emoji#complete
+  autocmd FileType gitcommit setlocal completefunc=emoji#complete
+augroup END
+
+" Always be in paste mode, please.
+set paste
+
+" I can't find things on my own, so highlight them.
+set hlsearch
+
+" Trailing whitespaces are the devil.  Reveal the devils, but make them green.
+highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
+match ExtraWhitespace /\s\+$\| \+\ze\t/
+
+" Number those lines so I can practice counting.
+set number
+
+" for vim-gitgutter, to not have it destroy the CPU.
+set updatetime=1000
+
+let g:tsuquyomi_use_local_typescript = 0
+let g:tsuquyomi_use_dev_node_module = 0
+"let g:tsuquyomi_nodejs_path = '/usr/local/opt/node@8/bin/node'
+
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+
+" Activation based on file type
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType typescript,javascript,sh,lisp,clojure,scheme RainbowParentheses
+augroup END
+
+autocmd FileType typescript nmap <buffer> <Space>t : <C-u>echo tsuquyomi#hint()<CR>
+
+" Set the filetype based on the file's extension, but only if
+" 'filetype' has not already been set
+au BufRead,BufNewFile *.zone setfiletype dns

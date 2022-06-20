@@ -1,0 +1,44 @@
+# Reset the PATH before augmenting it.  It is not clear why this is important.
+if [ -f /etc/environment ]; then
+  . /etc/environment
+elif [ -x /usr/libexec/path_helper ]; then
+  # Use the macOS way of resetting it via paths.d
+  PATH=""
+  MANPATH=""
+  eval "$(/usr/libexec/path_helper -s)"
+  export PATH="$PATH"
+fi
+
+export EDITOR='vim'
+
+export CARGO_INCREMENTAL=0
+
+{{- if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.arch "arm64" }}
+eval "$(/opt/homebrew/bin/brew shellenv)"
+{{- else if eq .chezmoi.arch "intel" }}
+# Maybe Intel Homebrew thing.  Fix this in the Chezmoi templates.
+eval "$(/usr/local/bin/brew shellenv)"
+{{- else }}
+# Unknown Mac HomeBrew thing.  Fix this!
+{{- end -}}
+{{- end }}
+
+# User configuration
+#export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
+
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
+
+if [ -f "$HOME/.rover/env" ]; then
+  # Leave these two comments. Their presence avoids Rover re-introducing them.
+  # source "/home/{{ .chezmoi.username }}/.rover/env"
+  # source "/Users/{{ .chezmoi.username }}/.rover/env"
+  source "$HOME/.rover/env"
+fi
+
+{{ if ne .chezmoi.hostname "playground" -}}
+  eval $(ssh-agent)
+{{- end }}

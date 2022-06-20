@@ -1,0 +1,115 @@
+# Path to your oh-my-zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Use a custom ZSH directory, if there is one.
+if [ -d "$HOME/.zsh-custom" ]; then
+  ZSH_CUSTOM="$HOME/.zsh-custom"
+fi
+
+# Set name of the theme to load.
+# Look in ~/.oh-my-zsh/themes/
+# Optionally, if you set this to "random", it'll load a random theme each
+# time that oh-my-zsh is loaded.
+ZSH_THEME="bullet-train"
+BULLETTRAIN_PROMPT_ORDER=(status custom context dir go git hg cmd_exec_time)
+
+DEFAULT_USER="{{ .chezmoi.username }}"
+
+# Uncomment the following line to change how often to auto-update (in days).
+export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+zstyle ':completion:*' completer _expand _complete _match _prefix
+zstyle ':completion:*:*:git:*' script ~/.zsh-custom/completion/git-completion.bash
+
+fpath=(~/.zsh-custom/completion/ $fpath)
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+plugins=(git sublime {{ if eq .chezmoi.os "darwin" }}macos {{ end }}git-extras common-aliases kubectl)
+
+# Run Oh My Zsh
+if [ -d "$ZSH" ]; then
+  source $ZSH/oh-my-zsh.sh
+else
+  echo "Oh My Zsh is not installed.  Install it on this system."
+fi
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+# Make Git = Hub
+if [ "$(command -v hub)" ]; then
+  eval "$(hub alias -s)"
+else
+  echo "Hub is not installed.  Install it on this system."
+fi
+
+# Do RegExp Search.
+bindkey '^R' history-incremental-pattern-search-backward
+
+# Each shell gets its own history.
+unsetopt share_history
+
+# Any shell command prefixed with a space won't be stored in history.
+setopt histignorespace
+
+# Load a lot of history.
+export HISTSIZE=1000000
+export SAVEHIST=100000
+
+# GPG agent setup, primarily for Yubikey Git signing.
+# THIS IS BROKEN DO NOT TRY TO USE IT AND EXPECT IT TO WORK.
+# if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
+#     source ~/.gnupg/.gpg-agent-info
+#     export GPG_AGENT_INFO
+# else
+#     # eval $(gpg-agent --daemon --write-env-file ~/.gnupg/.gpg-agent-info)
+#     eval $(gpg-agent --daemon)
+# fi
+# gpgconf --create-socketdir
+
+# iTerm Shell integration.
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Write an unlimited number of core dumps. You know as well as me that this
+# will eventually cause problems, so be aware!
+ulimit -c unlimited
+
+{{ if eq .chezmoi.os "darwin" -}}
+# Homebrew Path changes
+# export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+{{- end }}
+
+# Python3 pip3
+#if [ "$(command -v python3)" ]; then
+#  export PY_USER_BIN=$(python3 -c 'import site; print(site.USER_BASE + "/bin")')
+#  export PATH=$PY_USER_BIN:$PATH
+#else
+#  echo "Python3 is not installed.  Install it on this system."
+#fi
+
+if [ "$(command -v direnv)" ]; then
+  eval "$(direnv hook zsh)"
+else
+  echo "Direnv is not installed.  Install it on this system."
+fi
+
+# Perl
+if [ -d "$HOME/perl5" ]; then
+  source "$HOME/perl5/perlbrew/etc/bashrc"
+fi
+
+source "$HOME/.shell-extend-git.sh"
+source "$HOME/.shell-extend-iterm.sh"
+source "$HOME/.shell-extend-apollo.sh"
+source "$HOME/.shell-extend-meteor.sh"
+source "$HOME/.shell-extend-quick-tests.sh"
+
+BULLETTRAIN_GIT_BG=yellow
+BULLETTRAIN_EXEC_TIME_BG=black
+BULLETTRAIN_EXEC_TIME_FG=white
+
+autoload -Uz compinit && compinit

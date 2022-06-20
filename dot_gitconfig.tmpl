@@ -1,0 +1,66 @@
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[alias]
+	co = checkout
+	d = diff
+	p = add --patch
+	s = status
+	m = merge
+	mergenc = merge --no-commit
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	ipatch = "!f() { git apply $1; git add -p; }; f"
+	recent-branches = for-each-ref --sort=-committerdate --count=10 --format='%(refname:short)' refs/heads/
+[user]
+	name = {{ .name }}
+	email = {{ .email }}
+	signingkey = {{ .signingkey }}
+[push]
+	default = current
+[core]
+	editor = vim
+{{ if eq .chezmoi.os "darwin" -}}
+[credential]
+	helper = osxkeychain
+{{- end }}
+[diff]
+	wsErrorHighlight = all
+	noprefix = true
+[difftool "vscode"]
+	cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+	tool = vimdiff
+	ff = false
+	conflictstyle = diff3
+[mergetool]
+	keepBackup = false
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
+[commit]
+	gpgsign = false
+[pull]
+	ff = only
+[gpg]
+	program = gpg
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+
+[color "diff"]
+	whitespace = red reverse
+[merge "npm-merge-driver"]
+	name = automatically merge npm lockfiles
+	driver = npx npm-merge-driver merge %A %O %B %P
+[init]
+	defaultBranch = main
+	# templateDir = ~/.config/git/template/
+[rerere]
+	enabled = true
+
+[url "git@github.com:"]
+  insteadOf = https://github.com/
