@@ -11,7 +11,7 @@ if [ ! "$(command -v $binary_name)" ]; then
   fi
 
   if [ ! -f "$install_path/$binary_name" ]; then
-    curl -sfL https://direnv.net/install.sh | bin_path="$install_path" sh
+    curl -sfL https://direnv.net/install.sh | bin_path="$install_path" bash
   fi
 else
   echo "$binary_name is already installed"
