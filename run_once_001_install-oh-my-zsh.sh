@@ -3,7 +3,7 @@
 set -e
 
 ZSH="$HOME/.oh-my-zsh/"
-REMOTE="https://github.com/ohmyzsh/ohmyzsh"
+REMOTE="https://github.com/ohmyzsh/ohmyzsh.git"
 BRANCH="master"
 
 setup_ohmyzsh() {
