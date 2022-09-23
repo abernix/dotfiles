@@ -6,3 +6,6 @@ alias gapan='git add --intent-to-add . && git add --patch'
 # Git Last Branches
 alias glb='gb --sort=-committerdate H -10'
 alias gfix='$EDITOR `git diff --name-only | uniq`'
+
+# Checkout the root branch
+gct(){ git checkout "$(git rev-parse --abbrev-ref ${1:-origin}/HEAD | cut -d/ -f2)" }
