@@ -37,6 +37,8 @@ else
   echo "asdf is already installed"
 fi
 
-~/.asdf/bin/asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+if ! ~/.asdf/bin/asdf list | grep -qE '^nodejs$'; then
+  ~/.asdf/bin/asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+fi
 
 ~/.asdf/bin/asdf install
