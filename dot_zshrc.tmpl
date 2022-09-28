@@ -28,7 +28,21 @@ fpath=(~/.zsh-custom/completion/ $fpath)
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git asdf sublime {{ if eq .chezmoi.os "darwin" }}macos {{ end }}git-extras common-aliases kubectl)
+plugins=(
+  {{ if ne .chezmoi.hostname "playground" -}}
+    ssh-agent
+  {{- end }}
+  {{ if ne .chezmoi.hostname "playground" -}}
+    gpg-agent
+  {{- end }}
+  git
+  asdf
+  sublime
+  {{ if eq .chezmoi.os "darwin" }}macos {{ end }}
+  git-extras
+  common-aliases
+  kubectl
+)
 
 # Run Oh My Zsh
 if [ -d "$ZSH" ]; then
@@ -59,17 +73,6 @@ setopt histignorespace
 # Load a lot of history.
 export HISTSIZE=1000000
 export SAVEHIST=100000
-
-# GPG agent setup, primarily for Yubikey Git signing.
-# THIS IS BROKEN DO NOT TRY TO USE IT AND EXPECT IT TO WORK.
-# if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
-#     source ~/.gnupg/.gpg-agent-info
-#     export GPG_AGENT_INFO
-# else
-#     # eval $(gpg-agent --daemon --write-env-file ~/.gnupg/.gpg-agent-info)
-#     eval $(gpg-agent --daemon)
-# fi
-# gpgconf --create-socketdir
 
 # iTerm Shell integration.
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

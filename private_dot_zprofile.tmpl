@@ -38,7 +38,3 @@ if [ -f "$HOME/.rover/env" ]; then
   # source "/Users/{{ .chezmoi.username }}/.rover/env"
   source "$HOME/.rover/env"
 fi
-
-{{ if ne .chezmoi.hostname "playground" -}}
-  eval $(ssh-agent)
-{{- end }}
