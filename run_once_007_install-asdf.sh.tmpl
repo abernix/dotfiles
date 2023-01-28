@@ -4,7 +4,7 @@ set -e
 
 if [ ! "$(command -v gawk)" ]; then
   {{ if eq .chezmoi.os "linux" -}}
-  sudo apt-update
+  sudo apt update
   sudo apt install gawk -y
   {{ else if eq .chezmoi.os "darwin" -}}
   brew install gawk
