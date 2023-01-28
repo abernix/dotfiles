@@ -43,4 +43,10 @@ else
   echo "asdf plugin nodejs is already added"
 fi
 
+if ! ~/.asdf/bin/asdf list | grep -qE '^rust'; then
+  ~/.asdf/bin/asdf plugin-add rust https://github.com/asdf-community/asdf-rust.git
+else
+  echo "asdf plugin rust is already added"
+fi
+
 ~/.asdf/bin/asdf install
