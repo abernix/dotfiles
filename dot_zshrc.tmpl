@@ -54,13 +54,6 @@ fi
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-# Make Git = Hub
-if [ "$(command -v hub)" ]; then
-  eval "$(hub alias -s)"
-else
-  echo "Hub is not installed.  Install it on this system."
-fi
-
 # Do RegExp Search.
 bindkey '^R' history-incremental-pattern-search-backward
 
