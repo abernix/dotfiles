@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -e
+
+{{ if eq .chezmoi.os "linux" -}}
+  if [ ! "$(command -v dirmngr)" ]; then
+    sudo apt install dirmngr -y
+  else
+    echo "dirmngr is already installed"
+  fi
+{{ end -}}
+

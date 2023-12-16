@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+if [ ! "$(command -v gpg)" ]; then
+  {{ if eq .chezmoi.os "linux" -}}
+  sudo apt install gpg -y
+  {{ else if eq .chezmoi.os "darwin" -}}
+  brew install gpg
+  {{ end -}}
+else
+  echo "gpg is already installed"
+fi
+
