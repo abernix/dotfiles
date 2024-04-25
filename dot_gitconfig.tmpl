@@ -22,6 +22,8 @@
 	default = current
 [core]
 	editor = vim
+	excludesfile = ~/.gitignore_global
+
 {{ if eq .chezmoi.os "darwin" -}}
 [credential]
 	helper = osxkeychain
