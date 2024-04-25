@@ -13,6 +13,9 @@ fi
 ZSH_THEME="bullet-train"
 BULLETTRAIN_PROMPT_ORDER=(status custom context dir go git hg cmd_exec_time)
 
+# Temp, remove after https://github.com/ohmyzsh/ohmyzsh/issues/12328
+BULLETTRAIN_GIT_PROMPT_CMD="\$(_omz_git_prompt_info)"
+
 DEFAULT_USER="{{ .chezmoi.username }}"
 
 # Uncomment the following line to change how often to auto-update (in days).
