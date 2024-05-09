@@ -6,15 +6,16 @@ if [ -d "$HOME/.zsh-custom" ]; then
   ZSH_CUSTOM="$HOME/.zsh-custom"
 fi
 
+# Zsh Hack until things are fixed for Git Branches
+# https://github.com/ohmyzsh/ohmyzsh/issues/12328
+zstyle ':omz:alpha:lib:git' async-prompt no
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="bullet-train"
 BULLETTRAIN_PROMPT_ORDER=(status custom context dir go git hg cmd_exec_time)
-
-# Temp, remove after https://github.com/ohmyzsh/ohmyzsh/issues/12328
-BULLETTRAIN_GIT_PROMPT_CMD="\$(_omz_git_prompt_info)"
 
 DEFAULT_USER="{{ .chezmoi.username }}"
 
