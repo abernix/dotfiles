@@ -79,7 +79,7 @@ ulimit -c unlimited
 
 {{ if eq .chezmoi.os "darwin" -}}
 # Homebrew Path changes
-# export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
+export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 {{- end }}
 
 # Python3 pip3
