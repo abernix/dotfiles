@@ -36,7 +36,7 @@ plugins=(
     ssh-agent
   {{- end }}
   {{ if ne .chezmoi.hostname "playground" -}}
-    gpg-agent
+    #gpg-agent
   {{- end }}
   git
   mise
