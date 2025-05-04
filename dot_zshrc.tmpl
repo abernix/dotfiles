@@ -90,12 +90,6 @@ export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 #  echo "Python3 is not installed.  Install it on this system."
 #fi
 
-if [ "$(command -v direnv)" ]; then
-  eval "$(direnv hook zsh)"
-else
-  echo "Direnv is not installed.  Install it on this system."
-fi
-
 # Perl
 if [ -d "$HOME/perl5" ]; then
   source "$HOME/perl5/perlbrew/etc/bashrc"
