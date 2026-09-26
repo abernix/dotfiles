@@ -77,8 +77,9 @@
 	helper =
 	helper = !{{ . }} auth git-credential
 {{ else -}}
+{{/* Push over ssh, but keep fetching public repos over https: new machines have no ssh keys yet. */ -}}
 [url "git@github.com:"]
-	insteadOf = https://github.com/
+	pushInsteadOf = https://github.com/
 {{ end }}
 # Machine-specific settings that never get published.
 [include]
