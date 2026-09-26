@@ -15,7 +15,7 @@ zstyle ':omz:alpha:lib:git' async-prompt no
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="bullet-train"
-BULLETTRAIN_PROMPT_ORDER=(status custom context dir go git hg cmd_exec_time)
+BULLETTRAIN_PROMPT_ORDER=(status custom context dir git rust kctx cmd_exec_time)
 
 DEFAULT_USER="{{ .chezmoi.username }}"
 
@@ -47,6 +47,9 @@ plugins=(
   common-aliases
   kubectl
 )
+# Only load cloud tooling plugins where the tools exist.
+(( $+commands[gcloud] )) && plugins+=(gcloud)
+(( $+commands[kubectl] )) && plugins+=(kubectx)
 
 # Run Oh My Zsh
 if [ -d "$ZSH" ]; then
@@ -54,9 +57,6 @@ if [ -d "$ZSH" ]; then
 else
   echo "Oh My Zsh is not installed.  Install it on this system."
 fi
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 # Do RegExp Search.
 bindkey '^R' history-incremental-pattern-search-backward
@@ -78,11 +78,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 # will eventually cause problems, so be aware!
 ulimit -c unlimited
 
-{{ if eq .chezmoi.os "darwin" -}}
-# Homebrew Path changes
-export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
-{{- end }}
-
 # Python3 pip3
 #if [ "$(command -v python3)" ]; then
 #  export PY_USER_BIN=$(python3 -c 'import site; print(site.USER_BASE + "/bin")')
@@ -98,11 +93,17 @@ fi
 
 source "$HOME/.shell-extend-git.sh"
 source "$HOME/.shell-extend-iterm.sh"
-source "$HOME/.shell-extend-apollo.sh"
 source "$HOME/.shell-extend-quick-tests.sh"
 
 BULLETTRAIN_GIT_BG=yellow
 BULLETTRAIN_EXEC_TIME_BG=black
 BULLETTRAIN_EXEC_TIME_FG=white
+# Was: 235 (absolute, didn't adapt to theme); before that black, before that white.
+BULLETTRAIN_DIR_FG=8
 
 autoload -Uz compinit && compinit
+
+# Machine-specific settings that never get published.
+if [[ -f "$HOME/.zshrc.local" ]]; then
+  source "$HOME/.zshrc.local"
+fi
