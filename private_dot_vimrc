@@ -1,16 +1,15 @@
 source ~/.vim/bootstrap.vim
 call plug#begin('~/.vim/plugged')
-  Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-  Plug 'scrooloose/nerdcommenter'
-  Plug 'jason0x43/vim-js-indent'
-  Plug '/usr/local/opt/fzf'
+  Plug 'preservim/nerdtree', { 'on':  'NERDTreeToggle' }
+  Plug 'preservim/nerdcommenter'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
   Plug 'mileszs/ack.vim'
   Plug 'ctrlpvim/ctrlp.vim'
   " Plug 'vim-syntastic/syntastic'
   Plug 'junegunn/rainbow_parentheses.vim'
   Plug 'https://github.com/pangloss/vim-javascript'
-  Plug 'bling/vim-airline'
+  Plug 'vim-airline/vim-airline'
   Plug 'tpope/vim-surround'
   Plug 'airblade/vim-gitgutter'
   " Plug 'tpope/vim-sleuth'
@@ -57,27 +56,12 @@ function SetGitCommitOptions()
 endfunction
 autocmd FileType gitcommit call SetGitCommitOptions()
 
-" Syntastic defaults (from README)
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-
-" Typescript tsuquyomi w/ syntastic
-let g:tsuquyomi_disable_quickfix = 1
-" Shouldn't use 'tsc' checker!
-let g:syntastic_typescript_checkers = ['tsuquyomi']
-
 " Nerd Autocommenter
 let g:NERDDefaultAlign = 'left'
 let g:NERDCommentEmptyLines = 1
 let g:NERDSpaceDelims = 1
 
 " Autocomplete settings.
-set omnifunc=ale#completion#OmniFunc
 set completeopt=longest,menuone
 
 augroup emoji_complete
@@ -102,10 +86,6 @@ set number
 " for vim-gitgutter, to not have it destroy the CPU.
 set updatetime=1000
 
-let g:tsuquyomi_use_local_typescript = 0
-let g:tsuquyomi_use_dev_node_module = 0
-"let g:tsuquyomi_nodejs_path = '/usr/local/opt/node@8/bin/node'
-
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
@@ -114,8 +94,6 @@ augroup rainbow_lisp
   autocmd!
   autocmd FileType typescript,javascript,sh,lisp,clojure,scheme RainbowParentheses
 augroup END
-
-autocmd FileType typescript nmap <buffer> <Space>t : <C-u>echo tsuquyomi#hint()<CR>
 
 " Set the filetype based on the file's extension, but only if
 " 'filetype' has not already been set

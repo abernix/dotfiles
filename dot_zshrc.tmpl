@@ -6,8 +6,9 @@ if [ -d "$HOME/.zsh-custom" ]; then
   ZSH_CUSTOM="$HOME/.zsh-custom"
 fi
 
-# Zsh Hack until things are fixed for Git Branches
-# https://github.com/ohmyzsh/ohmyzsh/issues/12328
+# oh-my-zsh only runs its async git prompt when the prompt text itself contains
+# $(git_prompt_info). bullet-train calls it from build_prompt instead, so use
+# the synchronous version or the git segment stays empty.
 zstyle ':omz:alpha:lib:git' async-prompt no
 
 # Set name of the theme to load.
@@ -19,16 +20,10 @@ BULLETTRAIN_PROMPT_ORDER=(status custom context dir git rust cmd_exec_time)
 
 DEFAULT_USER="{{ .chezmoi.username }}"
 
-# Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=13
-
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
 zstyle ':completion:*' completer _expand _complete _match _prefix
-zstyle ':completion:*:*:git:*' script ~/.zsh-custom/completion/git-completion.bash
-
-fpath=(~/.zsh-custom/completion/ $fpath)
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
@@ -41,7 +36,6 @@ plugins=(
   {{- end }}
   git
   mise
-  sublime
   {{ if eq .chezmoi.os "darwin" }}macos {{ end }}
   git-extras
   common-aliases
@@ -86,7 +80,7 @@ ulimit -c unlimited
 #fi
 
 # Perl
-if [ -d "$HOME/perl5" ]; then
+if [ -f "$HOME/perl5/perlbrew/etc/bashrc" ]; then
   source "$HOME/perl5/perlbrew/etc/bashrc"
 fi
 

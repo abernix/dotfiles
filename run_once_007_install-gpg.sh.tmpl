@@ -2,6 +2,12 @@
 
 set -e
 
+{{/* gpg is only needed for commit signing, so skip it without a signing key. */ -}}
+{{ if not .signingkey -}}
+echo "No signing key configured, not installing gpg"
+exit 0
+{{ end -}}
+
 if [ ! "$(command -v gpg)" ]; then
   {{ if eq .chezmoi.os "linux" -}}
   sudo apt install gpg -y

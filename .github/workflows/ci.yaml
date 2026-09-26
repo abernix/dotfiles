@@ -15,7 +15,7 @@ jobs:
     container:
       image: mcr.microsoft.com/devcontainers/base:ubuntu
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Install as the vscode user
@@ -31,7 +31,38 @@ jobs:
     env:
       HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install
+        run: ./install.sh
+      - name: Verify
+        run: .github/verify.sh
+
+  macos-intel:
+    runs-on: macos-15-intel
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install
+        run: ./install.sh
+      - name: Verify
+        run: .github/verify.sh
+
+  ubuntu-focal:
+    # Ubuntu 20.04 has glibc 2.31, older than some prebuilt binaries expect.
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+    steps:
+      - name: Install prerequisites
+        run: |
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ca-certificates curl git zsh > /dev/null
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Install
