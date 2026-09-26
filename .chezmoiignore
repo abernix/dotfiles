@@ -2,3 +2,7 @@
 install.sh
 LICENSE
 README.md
+
+# Machine-specific settings; never publish these.
+.zshrc.local
+.gitconfig.local

@@ -1,6 +1,36 @@
+# Default to a UTF-8 locale when nothing else set one (some terminals and ssh
+# sessions leave LANG empty, which breaks the git prompt with "character not in
+# range").
+if [[ -z "$LANG" ]]; then
+  export LANG={{ if eq .chezmoi.os "linux" }}C.UTF-8{{ else }}en_US.UTF-8{{ end }}
+fi
+
+# Keep PATH entries unique.
+typeset -U path PATH
+
+{{ if eq .chezmoi.os "darwin" -}}
+# Homebrew, for Apple Silicon or Intel.
+for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  if [[ -x "$brew" ]]; then
+    eval "$("$brew" shellenv)"
+    break
+  fi
+done
+
+{{ end -}}
+if [[ -d "$HOME/bin" ]]; then
+  path=("$HOME/bin" $path)
+fi
+
 if [ -f "$HOME/.rover/env" ]; then
   # Leave these two comments. Their presence avoids Rover re-introducing them.
   # source "/home/{{ .chezmoi.username }}/.rover/env"
   # source "/Users/{{ .chezmoi.username }}/.rover/env"
   source "$HOME/.rover/env"
+fi
+
+# mise shims for non-interactive shells; the oh-my-zsh plugin handles
+# interactive ones.
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --shims)"
 fi

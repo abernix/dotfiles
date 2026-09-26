@@ -13,20 +13,22 @@ export EDITOR='vim'
 
 export CARGO_INCREMENTAL=0
 
-{{- if eq .chezmoi.os "darwin" -}}
-{{- if eq .chezmoi.arch "arm64" }}
-eval "$(/opt/homebrew/bin/brew shellenv)"
-{{- else if eq .chezmoi.arch "intel" }}
-# Maybe Intel Homebrew thing.  Fix this in the Chezmoi templates.
-eval "$(/usr/local/bin/brew shellenv)"
-{{- else }}
-# Unknown Mac HomeBrew thing.  Fix this!
-{{- end -}}
+{{- if eq .chezmoi.os "darwin" }}
+
+# Homebrew, for Apple Silicon or Intel.
+for brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  if [[ -x "$brew" ]]; then
+    eval "$("$brew" shellenv)"
+    break
+  fi
+done
 {{- end }}
 
 # User configuration
-#export PATH=$HOME/bin:$PATH
 export PATH=$HOME/.local/bin:$PATH
+if [[ -d "$HOME/bin" ]]; then
+  export PATH=$HOME/bin:$PATH
+fi
 
 if [ -f "$HOME/.cargo/env" ]; then
   source "$HOME/.cargo/env"
@@ -39,4 +41,6 @@ if [ -f "$HOME/.rover/env" ]; then
   source "$HOME/.rover/env"
 fi
 
-eval "$(mise activate zsh --shims)"
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh --shims)"
+fi

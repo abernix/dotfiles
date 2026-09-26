@@ -1,5 +1,29 @@
 *~
-{{ if eq .chezmoi.os "darwin" -}}
-.DS_Store
-{{- end }}
 .tool-versions
+local-only.*
+.local_save/
+mise.local.toml
+.config/mise/config.local.toml
+**/.claude/settings.local.json
+**/.claude/.cc-writes/
+{{- if eq .chezmoi.os "darwin" }}
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+{{- end }}
