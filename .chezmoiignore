@@ -6,3 +6,5 @@ README.md
 # Machine-specific settings; never publish these.
 .zshrc.local
 .gitconfig.local
+.config/mise/secrets.env
+.config/mise/config.local.toml*
