@@ -6,3 +6,8 @@ README.md
 # Machine-specific settings; never publish these.
 .zshrc.local
 .gitconfig.local
+# mise owns its own config; the repo only ships conf.d/secrets.toml.
+.config/mise/*
+!.config/mise/conf.d
+.config/mise/conf.d/*
+!.config/mise/conf.d/secrets.toml
