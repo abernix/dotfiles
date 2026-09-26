@@ -15,7 +15,7 @@ zstyle ':omz:alpha:lib:git' async-prompt no
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
 ZSH_THEME="bullet-train"
-BULLETTRAIN_PROMPT_ORDER=(status custom context dir git rust kctx cmd_exec_time)
+BULLETTRAIN_PROMPT_ORDER=(status custom context dir git rust cmd_exec_time)
 
 DEFAULT_USER="{{ .chezmoi.username }}"
 
@@ -45,11 +45,10 @@ plugins=(
   {{ if eq .chezmoi.os "darwin" }}macos {{ end }}
   git-extras
   common-aliases
-  kubectl
 )
 # Only load cloud tooling plugins where the tools exist.
 (( $+commands[gcloud] )) && plugins+=(gcloud)
-(( $+commands[kubectl] )) && plugins+=(kubectx)
+(( $+commands[kubectl] )) && plugins+=(kubectl kubectx)
 
 # Run Oh My Zsh
 if [ -d "$ZSH" ]; then

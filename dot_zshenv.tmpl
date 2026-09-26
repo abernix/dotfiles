@@ -2,7 +2,7 @@
 # sessions leave LANG empty, which breaks the git prompt with "character not in
 # range").
 if [[ -z "$LANG" ]]; then
-  export LANG=en_US.UTF-8
+  export LANG={{ if eq .chezmoi.os "linux" }}C.UTF-8{{ else }}en_US.UTF-8{{ end }}
 fi
 
 # Keep PATH entries unique.

@@ -14,7 +14,7 @@
 	last = log -1 HEAD
 	ipatch = "!f() { git apply $1; git add -p; }; f"
 	recent-branches = for-each-ref --sort=-committerdate --count=10 --format='%(refname:short)' refs/heads/
-	co-author = !git commit --amend --message=\"$(git show --format=%B --no-patch HEAD)\" --message=\"$(printf 'Co-Authored-By: %s <%s>' \"$(git config --get user.name)\" \"$(git config --get user.email)\")\"
+	co-author = !git commit --amend --no-edit --trailer \"Co-authored-by: $(git config user.name) <$(git config user.email)>\"
 [user]
 	name = {{ .name }}
 	email = {{ .email }}
@@ -73,8 +73,10 @@
 [credential "https://gist.github.com"]
 	helper =
 	helper = !{{ . }} auth git-credential
-
-{{ end -}}
+{{ else -}}
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+{{ end }}
 # Machine-specific settings that never get published.
 [include]
 	path = ~/.gitconfig.local
