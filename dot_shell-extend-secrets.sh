@@ -40,7 +40,8 @@ mise-secret() {
     mkdir -p "${file:h}"
     touch "$file"
     tmp="$(mktemp "${file}.XXXXXX")" || exit 1
-    trap 'rm -f "$tmp"' EXIT INT TERM HUP
+    trap 'rm -f "$tmp"' EXIT
+    trap 'exit 130' INT TERM HUP
     grep -Ev "^(export[[:space:]]+)?${name}[[:space:]]*=" "$file" > "$tmp"
     (( $? <= 1 )) || exit 1
     printf "%s='%s'\n" "$name" "$value" >> "$tmp" || exit 1
