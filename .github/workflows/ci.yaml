@@ -4,15 +4,37 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  clone-and-install:
+  codespaces:
+    # Mirrors a Codespace: the devcontainer image, running install.sh as the
+    # non-root vscode user.
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
-      env:
-        CODESPACES: true
+      image: mcr.microsoft.com/devcontainers/base:ubuntu
     steps:
-      - uses: actions/checkout@v3
-      - run: ./install.sh
-      - name: chezmoi data
-        run: '"$HOME/.local/bin/chezmoi" data'
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install as the vscode user
+        run: |
+          cp -r "$GITHUB_WORKSPACE" /home/vscode/dotfiles
+          chown -R vscode:vscode /home/vscode/dotfiles
+          sudo -u vscode -H env CODESPACES=true sh -c 'cd ~/dotfiles && ./install.sh'
+      - name: Verify
+        run: sudo -u vscode -H env CODESPACES=true ~vscode/dotfiles/.github/verify.sh
+
+  macos:
+    runs-on: macos-latest
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install
+        run: ./install.sh
+      - name: Verify
+        run: .github/verify.sh
