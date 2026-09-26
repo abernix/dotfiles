@@ -4,15 +4,20 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   codespaces:
     # Mirrors a Codespace: the devcontainer image, running install.sh as the
     # non-root vscode user.
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
+      image: mcr.microsoft.com/devcontainers/base:ubuntu
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Install as the vscode user
         run: |
           cp -r "$GITHUB_WORKSPACE" /home/vscode/dotfiles
@@ -23,8 +28,12 @@ jobs:
 
   macos:
     runs-on: macos-latest
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Install
         run: ./install.sh
       - name: Verify
