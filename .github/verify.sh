@@ -30,9 +30,11 @@ secrets="$HOME/.config/mise/secrets.env"
 if [ ! -e "$secrets" ]; then
   printf "CI_FAKE_SECRET='not-a-real-secret'\n" > "$secrets"
   chmod 600 "$secrets"
+  trap 'rm -f "$secrets"' EXIT
   loaded="$(cd "$HOME" && mise exec -- sh -c 'echo "$CI_FAKE_SECRET"')"
   listed="$(cd "$HOME" && mise set | awk '$1 == "CI_FAKE_SECRET" { print $2 }')"
-  rm "$secrets"
+  rm -f "$secrets"
+  trap - EXIT
   [ "$loaded" = "not-a-real-secret" ] || { echo "secret not loaded"; exit 1; }
   [ "$listed" = "[redacted]" ] || { echo "secret not redacted: $listed"; exit 1; }
 fi
