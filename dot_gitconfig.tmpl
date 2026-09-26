@@ -49,17 +49,16 @@
 	ff = only
 [gpg]
 	program = gpg
+{{ if lookPath "git-lfs" -}}
 [filter "lfs"]
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
+{{ end -}}
 
 [color "diff"]
 	whitespace = red reverse
-[merge "npm-merge-driver"]
-	name = automatically merge npm lockfiles
-	driver = npx npm-merge-driver merge %A %O %B %P
 [init]
 	defaultBranch = main
 	# templateDir = ~/.config/git/template/

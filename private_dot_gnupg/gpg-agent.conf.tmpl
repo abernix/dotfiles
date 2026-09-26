@@ -1,6 +1,6 @@
 #extra-socket $HOME/.gnupg/S.gpg-agent.extra
 {{ if eq .chezmoi.os "darwin" -}}
-pinentry-program /usr/local/bin/pinentry-mac
+pinentry-program {{ if eq .chezmoi.arch "arm64" }}/opt/homebrew{{ else }}/usr/local{{ end }}/bin/pinentry-mac
 {{- end }}
 #enable-ssh-support
 default-cache-ttl 600

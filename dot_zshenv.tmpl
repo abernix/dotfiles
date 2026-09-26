@@ -25,13 +25,6 @@ if [[ -d "$HOME/bin" ]]; then
   path=("$HOME/bin" $path)
 fi
 
-if [ -f "$HOME/.rover/env" ]; then
-  # Leave these two comments. Their presence avoids Rover re-introducing them.
-  # source "/home/{{ .chezmoi.username }}/.rover/env"
-  # source "/Users/{{ .chezmoi.username }}/.rover/env"
-  source "$HOME/.rover/env"
-fi
-
 # mise shims for non-interactive shells; the oh-my-zsh plugin handles
 # interactive ones.
 if (( $+commands[mise] )); then
