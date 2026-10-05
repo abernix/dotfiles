@@ -7,7 +7,7 @@
 #   pg down      stop (the home disk stays)
 #   pg keep 8    keep it up past the 03:00 nightly stop for 8 more hours (max 168)
 #   pg status    what's running, where, and until when
-#   pg ssh       ssh in ($PG_HOST, default playground-next until cutover)
+#   pg ssh       ssh in ($PG_HOST, default playground)
 
 # The namespace warns at Pod Security "restricted" for the Tailscale sidecar on
 # every write; that is expected, so it is filtered out.
@@ -46,7 +46,7 @@ pg() {
       _pg_kubectl get pods -l app=playground -o wide 2>/dev/null
       ;;
     ssh)
-      shift; ssh "jesse@${PG_HOST:-playground-next}" "$@"
+      shift; ssh "jesse@${PG_HOST:-playground}" "$@"
       ;;
     *)
       echo "pg up [big] | down | keep <hours> | status | ssh" >&2
