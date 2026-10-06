@@ -1,0 +1,5 @@
+# One target dir shared by every checkout and worktree, so each one doesn't
+# grow its own multi-GB target/.  Parallel builds take turns on cargo's lock.
+# Lives here, not in secrets.env: dotenv files don't render templates.
+[env]
+CARGO_TARGET_DIR = "{{ env.HOME }}/.cargo/target"
