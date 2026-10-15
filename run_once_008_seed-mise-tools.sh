@@ -36,4 +36,5 @@ fi
   uv@latest \
   gh@latest \
   rg@latest \
+  sccache@latest \
   claude@latest

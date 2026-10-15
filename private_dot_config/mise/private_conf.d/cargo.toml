@@ -3,3 +3,8 @@
 # Lives here, not in secrets.env: dotenv files don't render templates.
 [env]
 CARGO_TARGET_DIR = "{{ env.HOME }}/.cargo/target"
+# sccache covers builds that miss the shared target dir (other features or
+# toolchains).  It can't cache incremental crates or linking.  Empty unless
+# sccache is installed: cargo fails outright on a missing wrapper, and CI and
+# Codespaces don't seed it.
+RUSTC_WRAPPER = "{% if get_env(name='MISE_DATA_DIR', default=get_env(name='XDG_DATA_HOME', default=env.HOME ~ '/.local/share') ~ '/mise') ~ '/installs/sccache' is dir %}sccache{% endif %}"
