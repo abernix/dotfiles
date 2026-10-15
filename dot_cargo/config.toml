@@ -1,5 +1,2 @@
-#[build]
-#rustc-wrapper = "/home/jesse/.cargo/bin/sccache"
-
 [net]
 git-fetch-with-cli = true
