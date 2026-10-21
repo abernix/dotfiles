@@ -25,6 +25,13 @@ env -i HOME="$HOME" PATH=/usr/bin:/bin zsh -c 'mise --version'
 step "mise config loads without a secrets file"
 mise env > /dev/null
 
+step "RUSTC_WRAPPER is unset or runnable"
+wrapper="$(cd "$HOME" && mise exec -- sh -c 'echo "${RUSTC_WRAPPER:-}"')"
+echo "RUSTC_WRAPPER=$wrapper"
+if [ -n "$wrapper" ]; then
+  (cd "$HOME" && mise exec -- "$wrapper" --version)
+fi
+
 step "mise loads and redacts ~/.config/mise/secrets.env"
 secrets="$HOME/.config/mise/secrets.env"
 if [ ! -e "$secrets" ]; then
